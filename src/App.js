@@ -2,17 +2,24 @@ import './App.css';
 import { useState} from "react";
 
 function App() {
-    const [taches, setTaches] = useState([]);
-    const [nomTache, setNomTache] = useState("");
+    const [taches, setTaches] = useState([]); // etat pour la liste de taches
+    const [nomTache, setNomTache] = useState(""); // etat pour la tache en cours de saisie
 
-    function ajouterTache(taches, setTaches, nomTache) {
+    function ajouterTache() {
         if (nomTache.trim() !== "") {
-            setTaches([...taches, { id: Date.now(), nom: nomTache }]);
-        }
+          //  setTaches([...taches, { id: Date.now(), nom: nomTache }]);
+
+            setTaches([...taches, nomTache ]);
+            setNomTache("");
+       }
     }
 
-    function supprimerTache(taches, setTaches, id) {
-        setTaches(taches.filter(tache => tache.id !== id));
+    function supprimerTache(id) {
+        //setTaches(taches.filter(tache => tache.id !== id));
+
+        const newTask = [...taches];
+        newTask.splice(id, 1);
+        setTaches(newTask);
     }
 
     return (
@@ -22,15 +29,12 @@ function App() {
                 onChange={(e) => setNomTache(e.target.value)}
                 placeholder="Nom de la tâche"
             />
-            <button onClick={() => {
-                ajouterTache(taches, setTaches, nomTache);
-                setNomTache("");
-            }}>Ajouter</button>
+            <button onClick={ajouterTache}>Ajouter</button>
             <ul>
-                {taches.map(tache => (
-                    <li key={tache.id}>
-                        {tache.nom}
-                        <button onClick={() => supprimerTache(taches, setTaches, tache.id)}>Supprimer</button>
+                {taches.map((tache, id) => (
+                    <li key={id}>
+                        {tache}
+                        <button onClick={() => supprimerTache(id)}>Supprimer</button>
                     </li>
                 ))}
             </ul>
